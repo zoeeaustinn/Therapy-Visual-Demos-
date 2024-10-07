@@ -24,6 +24,7 @@ function setup() {
 
 // canvas underneath
 createCanvas(1400, 725);
+
     
 
 //canvas on top 
@@ -82,7 +83,7 @@ button2.size(115, 75);
     //button "submit" text size
 button2.style('font-size', '25px');
     //adds mousepress to button
-button2.mousePressed(onButtonPress);
+button2.mousePressed(onButton2Press);
     // hides button
 button2.hide();
 
@@ -170,6 +171,13 @@ function onButtonPress() {
     //adds action to button presses
     console.log("button pressed");
 }
+
+
+function onButton2Press(){ 
+  background(245, 245, 220);
+  isMoving = true;
+}
+
 
 function onButton3Press(){ 
   slider.show();
