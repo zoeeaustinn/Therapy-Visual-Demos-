@@ -9,27 +9,33 @@ let input;
 let button; let button2; let button3;
 let toggleButton;
 let gui;
-//let slider; let slider2; let slider3;
-
-//let topCanvas;
-//let showTopCanvas = true;
-
-
 
 let inputVisible = false; //hides text box, buttons, and toggles
 let isMoving = true;
 
+let state = 0
+let IntroPage;
+let MoldPage;
+let DrawPage;
+let showMoldPage = true;
+
+let speech;
+let PeriodCheck = 0;
+
 
 function setup() {
 
-// canvas underneath
 createCanvas(1400, 725);
 
-    
+speech = new p5.Speech(voiceReady);
 
 //canvas on top 
-//topCanvas = createGraphics(1400, 725);
-
+MoldPage = createGraphics (1400, 725);
+MoldPage.background (0);
+//canvas underneath 
+DrawPage = createGraphics (1400, 725);
+DrawPage.background(245, 245, 220);
+    
 
 x = width / 2;
 y = height / 2;
@@ -41,7 +47,7 @@ b = random(255);
 
 
 
-background(245, 245, 220);
+
     
 pointSize = 50;//size of line
 
@@ -58,6 +64,8 @@ input.size (1100, 150);
 input.style('font-size', '50px');
     //hides input
 input.hide(); 
+//
+input.input(checkForPeriod);
 
 
 //creates INFO button
@@ -87,7 +95,7 @@ button2.mousePressed(onButton2Press);
     // hides button
 button2.hide();
 
-
+//Creates edit button 
 button3 = createButton('🖍️');
     //where the button is positioned 
 button3.position (1125, 740);
@@ -132,17 +140,62 @@ slider3.size (250,55);
 slider3.hide();
 
 
+function voiceReady(){
+  console.log(speech.voices);
+}
 
+function checkForPeriod(){
+  let textInput = input.value();
+
+
+  //checks if the last character is '.'
+if (textInput.endsWith('.')&& textInput.length > PeriodCheck){
+
+let newText = textInput.substring(PeriodCheck);
+
+let sentences = newText.split('.');
+
+for (let i = 0; i < sentences.length - 1; i++){
+  let sentence = sentences[i].trim();
+
+  if (sentence.length > 0){
+
+  //adjusts the rate of voice
+  speech.setRate(0.7); 
+  speech.speak(sentence + '.');
+ }
+}
+PeriodCheck = textInput.length;
+  }
 }
 
 
 
 
 
+
+function startSpeaking(){
+  let textInput = input.value();
+  
+
+}
+
+
+}
+
+
 function draw() {
 
-//pointSize = slider.value();
 
+  //drawing function on mold page
+  if(showMoldPage){
+    MoldPage.circle(random(width),random(height),10);
+    MoldPage.fill(255);
+  }
+
+  
+
+//pointSize = slider.value();
 
     if (isMoving){
   // adjust the rate of the speed of the point - i < 10
@@ -151,41 +204,52 @@ function draw() {
     }
     } else {
 
-        stroke(r, g, b);
-        strokeWeight(pointSize);
-        point(x, y);
-    }
+        DrawPage.stroke(r, g, b);
+        DrawPage.strokeWeight(pointSize);
+        DrawPage.point(x, y);
     
-    //if (showTopCanvas){
-      //topCanvas.background(255, 200, 200, 150);
-     // topCanvas.fill(0);
-      //topCanvas.textSize(32);
-      //topCanvas.text('Top Canvas Working', 100, 100);
+  
+    }
 
-     // image(topCanvas, 0, 0);
-   /// }
+    //displays the bottom canvas 
+    image(DrawPage, 0, 0);
 
+
+    //displays the top canvas(MoldPage), only if 'showMoldPage' is true
+    if(showMoldPage){
+    image(MoldPage, 0, 0);
+    }
 }
 
+//
 function onButtonPress() {
     //adds action to button presses
     console.log("button pressed");
 }
 
-
+//RESTART BUTTON 
 function onButton2Press(){ 
-  background(245, 245, 220);
+
+  //displays the mold page
+  showMoldPage = true;
+  //clears page from previous drawings
+  DrawPage.clear();
+  //resets the background to original color
+  DrawPage.background(245, 245, 220);
+  //Allows point to restart moving again
   isMoving = true;
+  input.value('');
+  PeriodCheck = 0;
 }
 
-
+//when 🖍️ is pressed, editing sliders show
 function onButton3Press(){ 
   slider.show();
   slider2.show();
   slider3.show();
 }
 
-
+//When any key is pressed, input box and buttons show
 function keyPressed(){
     if (!inputVisible) {
         input.show();
@@ -223,8 +287,16 @@ b = random(255);
 // function for toggle button
 function onTogglePress(){
     isMoving = false; //stops the point from moving
-    //showTopCanvas = false; 
+    showMoldPage = false; // hides the top canvas when the DONE button is pressed 
 }
+
+
+
+
+
+
+
+
 
 
 function step(){
@@ -247,9 +319,9 @@ function step(){
     //g = constrain (g, 0, 255);
     //b = constrain (b, 0, 255);
 
-    stroke(r, g, b);
-    point (x, y);
-    strokeWeight(pointSize);// Size of point
+    DrawPage.stroke(r, g, b);
+    DrawPage.point (x, y);
+    DrawPage.strokeWeight(pointSize);// Size of point
     
 }
 
