@@ -256,7 +256,7 @@ function keyPressed(){
         toggleButton.show();
         
         inputVisible = true;
-    }
+    
   }
 
 
@@ -281,7 +281,7 @@ g = random(255);
 b = random(255);
 
 }
-
+}
 // function for toggle button
 function onTogglePress(){
     isMoving = false; //stops the point from moving
