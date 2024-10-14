@@ -13,7 +13,7 @@ let gui;
 let inputVisible = false; //hides text box, buttons, and toggles
 let isMoving = true;
 
-let state = 0
+let state = 0 // 0; intro, 1; Drawing
 let IntroPage;
 let MoldPage;
 let DrawPage;
@@ -21,19 +21,20 @@ let showMoldPage = true;
 
 let speech;
 let PeriodCheck = 0;
+//popup = createDiv('welcome');
 
 
 function setup() {
 
-createCanvas(1400, 725);
+createCanvas(1300, 725);
 
 speech = new p5.Speech(voiceReady);
 
 //canvas on top 
-MoldPage = createGraphics (1400, 725);
+MoldPage = createGraphics (1300, 725);
 MoldPage.background (0);
 //canvas underneath 
-DrawPage = createGraphics (1400, 725);
+DrawPage = createGraphics (1300, 725);
 DrawPage.background(245, 245, 220);
     
 
@@ -45,15 +46,19 @@ r = random(255);
 g = random(255);
 b = random(255);
 
-
-
-
     
 pointSize = 50;//size of line
 
+setupUI();
+
+//popup = createDiv('welcome');
+//popup.style(CENTER, CENTER);
+///popup.style('font-size', '32px');
+//popup.style('background', '(255, 255, 255, 0.9)');
+//popup.style('display', 'none');
 
 
-
+function setupUI(){
     //creates input (TEXT BOX)
 input = createInput('Please Type Here'); 
     //where the input box is located
@@ -122,23 +127,7 @@ toggleButton.mousePressed(onTogglePress);
     //adds mousepress to toggle 
 toggleButton.hide();
 
-
-slider = createSlider("Slider",128, 32, 0, 1);
-slider.position (1400, 0);
-slider.size (250,55);
-slider.hide();
-
-slider2 = createSlider("Slider",128, 32, 0, 1);
-slider2.position (1400, 100);
-slider2.size (250,55);
-slider2.hide();
-
-
-slider3 = createSlider("Slider",128, 32, 0, 1);
-slider3.position (1400, 200);
-slider3.size (250,55);
-slider3.hide();
-
+}
 
 function voiceReady(){
   console.log(speech.voices);
@@ -150,16 +139,12 @@ function checkForPeriod(){
 
   //checks if the last character is '.'
 if (textInput.endsWith('.')&& textInput.length > PeriodCheck){
-
 let newText = textInput.substring(PeriodCheck);
-
 let sentences = newText.split('.');
 
 for (let i = 0; i < sentences.length - 1; i++){
   let sentence = sentences[i].trim();
-
   if (sentence.length > 0){
-
   //adjusts the rate of voice
   speech.setRate(0.7); 
   speech.speak(sentence + '.');
@@ -169,23 +154,36 @@ PeriodCheck = textInput.length;
   }
 }
 
-
-
-
-
-
 function startSpeaking(){
   let textInput = input.value();
-  
-
 }
-
-
 }
 
 
 function draw() {
 
+switch (state){
+  case 0:
+    intro();
+    break;
+    case 1:
+      drawing();
+      break;
+}
+}
+
+
+function intro(){
+  background(245, 245, 220);
+  fill(0);
+  textSize(25);
+  text("Welcome to Therapy , our mission is to create a safe space for you to journal and rant about anything", 90 , 260 );
+  text("that has been bothering you. This website interacts with the keys you press and the words you type", 90, 290 );
+  text("to create a unique piece of artwork. We strive to transform the emotions you are feeling and whatever you" , 90, 320 );
+  text("are going through into something beautiful. Press dismiss and begin typing to start and when you are done" , 90 , 350 );
+  text("press submit." , 90 , 380 );}
+
+function drawing(){
 
   //drawing function on mold page
   if(showMoldPage){
@@ -193,7 +191,6 @@ function draw() {
     MoldPage.fill(255);
   }
 
-  
 
 //pointSize = slider.value();
 
@@ -213,8 +210,6 @@ function draw() {
 
     //displays the bottom canvas 
     image(DrawPage, 0, 0);
-
-
     //displays the top canvas(MoldPage), only if 'showMoldPage' is true
     if(showMoldPage){
     image(MoldPage, 0, 0);
@@ -251,7 +246,9 @@ function onButton3Press(){
 
 //When any key is pressed, input box and buttons show
 function keyPressed(){
-    if (!inputVisible) {
+
+    if (state ===0) {
+      state = 1;
         input.show();
         button.show();
         button2.show();
@@ -260,6 +257,7 @@ function keyPressed(){
         
         inputVisible = true;
     }
+  }
 
 
 //when '' key is pressed, colors will change on the canvas
@@ -283,7 +281,7 @@ g = random(255);
 b = random(255);
 
 }
-}
+
 // function for toggle button
 function onTogglePress(){
     isMoving = false; //stops the point from moving
@@ -302,11 +300,11 @@ function onTogglePress(){
 function step(){
 
     //Moves the point
-    x += random (-20, 20);
-    y += random (-20, 20);
+    x += random (-50, 50);
+    y += random (-50, 50);
 
     // Keeps line inside the canvas 
-    x = constrain (x, 0, 1400);
+    x = constrain (x, 0, 1300);
     y = constrain (y, 0, 725);
 
     //Changes color of line randomly
