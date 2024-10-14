@@ -177,11 +177,11 @@ function intro(){
   background(245, 245, 220);
   fill(0);
   textSize(25);
-  text("Welcome to Therapy , our mission is to create a safe space for you to journal and rant about anything", 90 , 260 );
-  text("that has been bothering you. This website interacts with the keys you press and the words you type", 90, 290 );
-  text("to create a unique piece of artwork. We strive to transform the emotions you are feeling and whatever you" , 90, 320 );
-  text("are going through into something beautiful. Press dismiss and begin typing to start and when you are done" , 90 , 350 );
-  text("press submit." , 90 , 380 );}
+  text("Welcome to Therapy , our mission is to create a safe space for you to journal and rant about anything", 80 , 260 );
+  text("that has been bothering you. This website interacts with the keys you press and the words you type", 80, 290 );
+  text("to create a unique piece of artwork. We strive to transform the emotions you are feeling and whatever you" , 80, 320 );
+  text("are going through into something beautiful. Press any key and begin typing to start and when you are done" , 80 , 350 );
+  text("press done." , 80 , 380 );}
 
 function drawing(){
 
