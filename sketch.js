@@ -21,6 +21,8 @@ let showMoldPage = true;
 
 let speech;
 let PeriodCheck = 0;
+let snowflakes = [];
+
 //popup = createDiv('welcome');
 
 
@@ -32,10 +34,10 @@ speech = new p5.Speech(voiceReady);
 
 //canvas on top 
 MoldPage = createGraphics (1300, 725);
-MoldPage.background (0);
+MoldPage.background (255, 235, 238);
 //canvas underneath 
 DrawPage = createGraphics (1300, 725);
-DrawPage.background(245, 245, 220);
+DrawPage.background(236, 239, 241);
     
 
 x = width / 2;
@@ -51,12 +53,6 @@ pointSize = 50;//size of line
 
 setupUI();
 
-//popup = createDiv('welcome');
-//popup.style(CENTER, CENTER);
-///popup.style('font-size', '32px');
-//popup.style('background', '(255, 255, 255, 0.9)');
-//popup.style('display', 'none');
-
 
 function setupUI(){
     //creates input (TEXT BOX)
@@ -64,9 +60,12 @@ input = createInput('Please Type Here');
     //where the input box is located
 input.position(0, 750);
     //size of input box
-input.size (1100, 150); 
+input.size (1045, 150); 
     //size of font in input.
 input.style('font-size', '50px');
+
+input.style('background-color', '#E3F2FD');
+
     //hides input
 input.hide(); 
 //
@@ -76,13 +75,17 @@ input.input(checkForPeriod);
 //creates INFO button
 button = createButton('INFO');
     //where the button is positioned 
-button.position (1125, 825);
+button.position (1060, 830);
     //button size
 button.size(115, 75);
     //button "submit" text size
 button.style('font-size', '25px');
+//button color
+button.style('background-color', '#FFF3E0');
+
+
     //adds mousepress to button
-button.mousePressed(onTogglePress);
+button.mousePressed(showIntro);
     //hide button
 button.hide();
 
@@ -90,38 +93,46 @@ button.hide();
 //creates RESTART button
 button2 = createButton('RESTART');
     //where the button is positioned 
-button2.position (1250, 825);
+button2.position (1185, 830);
     //button size
 button2.size(115, 75);
     //button "submit" text size
 button2.style('font-size', '25px');
+
+button2.style('background-color', '#FBE9E7');
+
     //adds mousepress to button
 button2.mousePressed(onButton2Press);
     // hides button
 button2.hide();
 
+
 //Creates edit button 
-button3 = createButton('🖍️');
+//button3 = createButton('🖍️');
     //where the button is positioned 
-button3.position (1125, 740);
+//button3.position (1125, 740);
     //button size
-button3.size(115, 75);
+///button3.size(115, 75);
     //button text size
-button3.style('font-size', '25px');
+//button3.style('font-size', '25px');
     //adds mousepress to button
-button3.mousePressed(onButton3Press);
+//button3.mousePressed(onButton3Press);
     // hides button
-button3.hide();
+//button3.hide();
 
 
     // creates DONE toggle
-toggleButton = createButton ('DONE');
+toggleButton = createButton ('DONE ✅');
     //position of toggle
-toggleButton.position (1250, 740);
+toggleButton.position (1060, 750);
     // set toggle size
-toggleButton.size(115, 75);
+toggleButton.size(240, 75);
     //set toggle font size
 toggleButton.style('font-size','25px');
+
+toggleButton.style('background-color','#E8EAF6');
+
+toggleButton.style('color','255');
     //event for toggle
 toggleButton.mousePressed(onTogglePress);
     //adds mousepress to toggle 
@@ -170,25 +181,44 @@ switch (state){
       drawing();
       break;
 }
+
+
+textSize(50);
+text('🖍️', mouseX, mouseY);
+
 }
 
 
 function intro(){
-  background(245, 245, 220);
-  fill(0);
+  background(232, 234, 246);
+  fill(50, 0, 128);
   textSize(25);
+  
   text("Welcome to Therapy , our mission is to create a safe space for you to journal and rant about anything", 80 , 260 );
   text("that has been bothering you. This website interacts with the keys you press and the words you type", 80, 290 );
   text("to create a unique piece of artwork. We strive to transform the emotions you are feeling and whatever you" , 80, 320 );
   text("are going through into something beautiful. Press any key and begin typing to start and when you are done" , 80 , 350 );
   text("press done." , 80 , 380 );}
 
+
+
+
+
+
+
+
+
+
 function drawing(){
 
   //drawing function on mold page
   if(showMoldPage){
-    MoldPage.circle(random(width),random(height),10);
-    MoldPage.fill(255);
+
+    MoldPage.fill(random(255),random(255), random(255));
+
+    let circleSize = random (5, 20);
+    MoldPage.circle(random(width),random(height), circleSize);
+ 
   }
 
 
@@ -204,8 +234,6 @@ function drawing(){
         DrawPage.stroke(r, g, b);
         DrawPage.strokeWeight(pointSize);
         DrawPage.point(x, y);
-    
-  
     }
 
     //displays the bottom canvas 
@@ -215,6 +243,17 @@ function drawing(){
     image(MoldPage, 0, 0);
     }
 }
+
+// when info button is pressed, intro screen shows and the rest disappears.
+function showIntro(){
+  state = 0;
+  input.hide();
+  button2.hide();
+  button.hide();
+  toggleButton.hide();
+
+}
+
 
 //
 function onButtonPress() {
@@ -230,19 +269,24 @@ function onButton2Press(){
   //clears page from previous drawings
   DrawPage.clear();
   //resets the background to original color
-  DrawPage.background(245, 245, 220);
+  DrawPage.background(255, 235, 238);
+  MoldPage.clear();
+  MoldPage.background (255, 235, 238);
+
+  r = random(255);
+  r = random(255);
+  r = random(255);
+
   //Allows point to restart moving again
   isMoving = true;
   input.value('');
   PeriodCheck = 0;
 }
 
-//when 🖍️ is pressed, editing sliders show
-function onButton3Press(){ 
-  slider.show();
-  slider2.show();
-  slider3.show();
-}
+
+//function onButtonPress(){ 
+ 
+//}
 
 //When any key is pressed, input box and buttons show
 function keyPressed(){
@@ -252,7 +296,7 @@ function keyPressed(){
         input.show();
         button.show();
         button2.show();
-        button3.show();
+        //button3.show();
         toggleButton.show();
         
         inputVisible = true;
