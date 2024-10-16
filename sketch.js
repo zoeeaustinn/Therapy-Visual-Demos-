@@ -21,10 +21,8 @@ let showMoldPage = true;
 
 let speech;
 let PeriodCheck = 0;
-let snowflakes = [];
 
-//popup = createDiv('welcome');
-
+letintroImage;
 
 function setup() {
 
@@ -32,12 +30,15 @@ createCanvas(1300, 725);
 
 speech = new p5.Speech(voiceReady);
 
+
+
+
 //canvas on top 
 MoldPage = createGraphics (1300, 725);
-MoldPage.background (255, 235, 238);
+MoldPage.background (0);
 //canvas underneath 
 DrawPage = createGraphics (1300, 725);
-DrawPage.background(236, 239, 241);
+DrawPage.background(0);
     
 
 x = width / 2;
@@ -52,9 +53,26 @@ b = random(255);
 pointSize = 50;//size of line
 
 setupUI();
+}
+
+function windowResized() {
+  resizeCanvas(1300, 725);
+  
+  //canvas on top 
+MoldPage = createGraphics (1300, 725);
+MoldPage.background (0);
+//canvas underneath 
+DrawPage = createGraphics (1300, 725);
+DrawPage.background(236, 239, 241);
+    
+}
+
+
 
 
 function setupUI(){
+
+  
     //creates input (TEXT BOX)
 input = createInput('Please Type Here'); 
     //where the input box is located
@@ -64,8 +82,11 @@ input.size (1045, 150);
     //size of font in input.
 input.style('font-size', '50px');
 
-input.style('background-color', '#E3F2FD');
+input.style('background-color', 'black');
 
+input.style('color','white');
+
+//input.style('border', '2x px solid white');
     //hides input
 input.hide(); 
 //
@@ -81,9 +102,11 @@ button.size(115, 75);
     //button "submit" text size
 button.style('font-size', '25px');
 //button color
-button.style('background-color', '#FFF3E0');
+button.style('background-color', 'black');
 
+button.style('color','white');
 
+//button.style('border', '2x px solid white');
     //adds mousepress to button
 button.mousePressed(showIntro);
     //hide button
@@ -99,8 +122,11 @@ button2.size(115, 75);
     //button "submit" text size
 button2.style('font-size', '25px');
 
-button2.style('background-color', '#FBE9E7');
+button2.style('background-color', 'black');
 
+button2.style('color','white');
+
+//button2.style('border', '2x px solid white');
     //adds mousepress to button
 button2.mousePressed(onButton2Press);
     // hides button
@@ -130,9 +156,11 @@ toggleButton.size(240, 75);
     //set toggle font size
 toggleButton.style('font-size','25px');
 
-toggleButton.style('background-color','#E8EAF6');
+toggleButton.style('background-color','black');
 
-toggleButton.style('color','255');
+toggleButton.style('color','white');
+
+//toggleButton.style('border', '2x px solid white');
     //event for toggle
 toggleButton.mousePressed(onTogglePress);
     //adds mousepress to toggle 
@@ -147,6 +175,9 @@ function voiceReady(){
 function checkForPeriod(){
   let textInput = input.value();
 
+if(textInput.length < PeriodCheck){
+  PeriodCheck = 0;
+}
 
   //checks if the last character is '.'
 if (textInput.endsWith('.')&& textInput.length > PeriodCheck){
@@ -157,7 +188,7 @@ for (let i = 0; i < sentences.length - 1; i++){
   let sentence = sentences[i].trim();
   if (sentence.length > 0){
   //adjusts the rate of voice
-  speech.setRate(0.7); 
+  speech.setRate(0.5); 
   speech.speak(sentence + '.');
  }
 }
@@ -168,7 +199,7 @@ PeriodCheck = textInput.length;
 function startSpeaking(){
   let textInput = input.value();
 }
-}
+
 
 
 function draw() {
@@ -214,9 +245,9 @@ function drawing(){
   //drawing function on mold page
   if(showMoldPage){
 
-    MoldPage.fill(random(255),random(255), random(255));
+    MoldPage.fill(255);
 
-    let circleSize = random (5, 20);
+    let circleSize = random (5, 50);
     MoldPage.circle(random(width),random(height), circleSize);
  
   }
@@ -271,11 +302,11 @@ function onButton2Press(){
   //resets the background to original color
   DrawPage.background(255, 235, 238);
   MoldPage.clear();
-  MoldPage.background (255, 235, 238);
+  MoldPage.background (0);
 
   r = random(255);
-  r = random(255);
-  r = random(255);
+  g = random(255);
+  b = random(255);
 
   //Allows point to restart moving again
   isMoving = true;
